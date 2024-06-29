@@ -88,7 +88,64 @@ try:
     with col6:
         st.markdown('### Normalized Stock Price Trends over Time')
         st.plotly_chart(plot(normalize(stocks_df)), use_container_width=True)
-            
     
+    # Calculate daily return of each asset
+    def stocks_daily_return(df):
+        df_daily_return = df.copy()
+		    
+        for i in df.columns[1:]:
+            df_daily_return[i] = ((df[i] - df[i].shift(1)) / df[i].shift(1)) * 100
+        
+        return df_daily_return
+    
+    # Calculate Daily Return for stocks and market over time
+    daily_return = stocks_daily_return(stocks_df).dropna()
+
+    # Calculate Market Return
+    market_return = daily_return['CAC40']
+
+    # Calculate Covariance for each stock
+    cov_matrix = daily_return.iloc[:,1:].cov() # Covariance matrix
+
+    # Calculate Variance for market
+    market_variance = np.var(market_return)
+
+    # Calculating Beta values for each stock
+    beta_value = {} 
+    for column in daily_return.iloc[:,1:].columns:
+        covariance = cov_matrix[column]['CAC40']
+        beta = covariance / market_variance
+        beta_value[column] = beta
+    
+    # Calculating market portfolio return (rm)
+    market_portfolio_return = market_return.mean() * 252
+
+    # Considering Risk-Free Rate of Return (rf) as 0
+    risk_free_rate = 0.068
+
+    # Calculate Expected Return (ri) using CAPM
+    expected_return = {}
+    for stock, beta in beta_value.items():
+        expected_returns = risk_free_rate + beta * (market_portfolio_return - risk_free_rate)
+        expected_return[stock] = expected_returns
+    
+    # Converting dict to dataframes
+    beta_df = pd.DataFrame.from_dict(beta_value, orient='index', columns=['Beta Value'])
+    beta_df.reset_index(inplace=True)
+    beta_df.rename(columns={'index': 'Stocks'}, inplace=True)
+
+    expected_return_df = pd.DataFrame.from_dict(expected_return, orient='index', columns=['Expected Return (in %)'])
+    expected_return_df.reset_index(inplace=True)
+    expected_return_df.rename(columns={'index': 'Stocks'}, inplace=True)
+
+    col7, col8 = st.columns([1, 1])
+    with col7:
+        data2 = daily_return.iloc[:, :-1]
+        st.markdown("### Daily Returns for Different Stocks")
+        st.dataframe(data2.sort_values(by='Date', ascending=False).head(), use_container_width = True)
+    with col8:
+        st.markdown("### Market Returns for CAC40")
+        st.dataframe(daily_return[['Date', 'CAC40']].sort_values(by='Date', ascending=False).head(), use_container_width=True)
+
 except:
     st.write("Something went wrong")
