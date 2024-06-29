@@ -35,7 +35,7 @@ try:
     cac40_data.reset_index(inplace=True)
 
     # Get 'Date' and 'Close' columns only
-    data1 = cac40_data[['Data', 'Close']]
+    data1 = cac40_data[['Date', 'Close']]
     cac40 = data1.copy()
 
     cac40.rename(columns={'Close': 'CAC40'}, inplace=True)
@@ -68,7 +68,27 @@ try:
         fig1.update_layout(width=700, margin=dict(l=20, r=20, t=50, b=20), legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right',x=1))
 
         return fig1
+    
+    # Min-max normalization of stock values
+    def normalize(df2):
+        df = df2.copy()
+        for i in df.columns[1:]:
+            min_val = df[i].min()
+            max_val = df[i].max()
+            df[i] = (df[i] - min_val) / (max_val - min_val)
+
+        return df
+    
+
+    # Line charts for selected stocks on web application
+    col5, col6 = st.columns([1,1])
+    with col5:
+        st.markdown('### Stock Price Trends over Time')
+        st.plotly_chart(plot(stocks_df), use_container_width=True)
+    with col6:
+        st.markdown('### Normalized Stock Price Trends over Time')
+        st.plotly_chart(plot(normalize(stocks_df)), use_container_width=True)
             
     
 except:
-    st.write("Please select valid stock")
+    st.write("Something went wrong")
