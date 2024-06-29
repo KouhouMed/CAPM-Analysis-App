@@ -146,6 +146,67 @@ try:
     with col8:
         st.markdown("### Market Returns for CAC40")
         st.dataframe(daily_return[['Date', 'CAC40']].sort_values(by='Date', ascending=False).head(), use_container_width=True)
+    
+    # Function to plot bar chart for daily returns for different stocks
+    def plot2(df, col):
+        color ='#0072BB'
+        fig2 = px.bar(df, x=df['Date'], y=df[col], color_discrete_sequence=[color])
+        fig2.update_layout(width=700, margin=dict(l=20, r=20, t=50, b=20), xaxis_title='', yaxis_title='')
+        return fig2
+
+    # Function to plot bar chart for market return for CAC40
+    def plot3(df):
+        color = '#004B8D'
+        fig3 = px.bar(df, x=df['Date'], y=df['CAC40'], color_discrete_sequence=[color])
+        fig3.update_layout(height=500, width=700, margin=dict(l=20, r=20, t=50, b=20), xaxis_title='', yaxis_title='')
+        return fig3	
+    
+    col9, col10 = st.columns([1, 1])
+    with col9:
+        st.markdown("### Daily Return Trends")
+        stock_lst = st.selectbox("Choose a stock", (stock_list))
+        st.plotly_chart(plot2(daily_return.iloc[:, :-1], stock_lst), use_container_width=True)
+    with col10:
+        st.markdown("### Market Return Trends")
+        st.plotly_chart(plot3(daily_return), use_container_width=True)
+    
+    col11, col12 = st.columns([1, 1])
+    with col11:
+        st.markdown("### Calculated Beta Value")
+        st.dataframe(beta_df, use_container_width = True)
+    with col12:
+        st.markdown("### Calculated Expected Returns using CAPM")
+        st.dataframe(expected_return_df, use_container_width=True)
+    
+    # Function to plot Bar chart for beta values of different stocks
+    def plot4(df):
+        fig4 = px.bar(x=df['Stocks'], y=df['Beta Value'])
+        fig4.update_layout(width=700, xaxis_title='', yaxis_title='')
+
+        return fig4
+
+    # Function to plot Bar chart for expected returns of different stocks
+    def plot5(df):
+        color = '#1f77b4'  # A shade of blue
+        fig5 = px.bar(x=df['Stocks'], y=df['Expected Return (in %)'], color_discrete_sequence=[color])
+        fig5.update_layout(width=700, xaxis_title='', yaxis_title='')
+
+        return fig5
+
+    col13, col14 = st.columns([1, 1])
+    with col13:
+        st.markdown("### Beta Values for Different Stocks and Market")
+        st.plotly_chart(plot4(beta_df), use_container_width=True)
+    with col14:
+        st.markdown("### Expected Returns for Different Stocks and Market")
+        st.plotly_chart(plot5(expected_return_df), use_container_width=True)
+    
+    # Calculating Expected Return for the portfolio
+    n = len(stocks_df.columns) - 1
+    portfolio_weights = 1/n * np.ones(n)
+    er_portfolio = sum(np.array(list(expected_return.values())) * portfolio_weights)
+
+    st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
 except:
     st.write("Something went wrong")
