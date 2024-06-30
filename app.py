@@ -187,7 +187,7 @@ try:
 
     # Function to plot Bar chart for expected returns of different stocks
     def plot5(df):
-        color = '#1f77b4'  # A shade of blue
+        color = '#73e6f5'  # A shade of blue
         fig5 = px.bar(x=df['Stocks'], y=df['Expected Return (in %)'], color_discrete_sequence=[color])
         fig5.update_layout(width=700, xaxis_title='', yaxis_title='')
 
