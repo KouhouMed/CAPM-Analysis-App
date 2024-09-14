@@ -234,7 +234,11 @@ try:
 
     st.plotly_chart(plot_sharpe_ratios(sharpe_df), use_container_width=True)
 
+    # Calculate portfolio Sharpe Ratio
+    portfolio_returns = daily_return[stock_list].mean(axis=1)
+    portfolio_sharpe_ratio = calculate_sharpe_ratio(portfolio_returns, risk_free_rate / 252)
 
+    st.subheader(f"Portfolio Sharpe Ratio: {portfolio_sharpe_ratio:.2f}")
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
