@@ -226,6 +226,15 @@ try:
     st.subheader("Sharpe Ratios")
     st.dataframe(sharpe_df, use_container_width=True)
 
+    # Visualize Sharpe Ratios
+    def plot_sharpe_ratios(df):
+        fig = px.bar(df, x='Stocks', y='Sharpe Ratio', title='Sharpe Ratios for Selected Stocks')
+        fig.update_layout(xaxis_title='Stocks', yaxis_title='Sharpe Ratio')
+        return fig
+
+    st.plotly_chart(plot_sharpe_ratios(sharpe_df), use_container_width=True)
+
+
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
