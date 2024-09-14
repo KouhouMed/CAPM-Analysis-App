@@ -222,6 +222,10 @@ try:
     sharpe_df.reset_index(inplace=True)
     sharpe_df.rename(columns={'index': 'Stocks'}, inplace=True)
 
+    # Display Sharpe Ratios
+    st.subheader("Sharpe Ratios")
+    st.dataframe(sharpe_df, use_container_width=True)
+
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
