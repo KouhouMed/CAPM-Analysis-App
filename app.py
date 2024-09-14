@@ -206,6 +206,12 @@ try:
     portfolio_weights = 1/n * np.ones(n)
     er_portfolio = sum(np.array(list(expected_return.values())) * portfolio_weights)
 
+    # Calculate Sharpe Ratio
+    def calculate_sharpe_ratio(returns, risk_free_rate):
+        excess_returns = returns - risk_free_rate
+        return np.mean(excess_returns) / np.std(excess_returns) * np.sqrt(252)  # Annualized
+
+
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
 except:
