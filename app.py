@@ -217,6 +217,11 @@ try:
         stock_returns = daily_return[stock].dropna()
         sharpe_ratios[stock] = calculate_sharpe_ratio(stock_returns, risk_free_rate / 252)  # Daily risk-free rate
 
+    # Convert Sharpe Ratios to DataFrame
+    sharpe_df = pd.DataFrame.from_dict(sharpe_ratios, orient='index', columns=['Sharpe Ratio'])
+    sharpe_df.reset_index(inplace=True)
+    sharpe_df.rename(columns={'index': 'Stocks'}, inplace=True)
+
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
