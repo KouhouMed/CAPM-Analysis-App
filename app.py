@@ -211,6 +211,12 @@ try:
         excess_returns = returns - risk_free_rate
         return np.mean(excess_returns) / np.std(excess_returns) * np.sqrt(252)  # Annualized
 
+    # Calculate Sharpe Ratio for each stock
+    sharpe_ratios = {}
+    for stock in stock_list:
+        stock_returns = daily_return[stock].dropna()
+        sharpe_ratios[stock] = calculate_sharpe_ratio(stock_returns, risk_free_rate / 252)  # Daily risk-free rate
+
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
