@@ -240,6 +240,9 @@ try:
 
     st.subheader(f"Portfolio Sharpe Ratio: {portfolio_sharpe_ratio:.2f}")
 
+    # Calculate correlation matrix
+    correlation_matrix = daily_return[stock_list].corr()
+
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
 except:
