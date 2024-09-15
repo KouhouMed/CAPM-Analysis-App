@@ -4,8 +4,6 @@ import plotly.express as px
 import streamlit as st
 import yfinance as yf 
 import datetime as dt
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Configuring web application
 st.set_page_config(page_title= "Market Insight Analysis", page_icon= ":chart:", layout = 'wide')
@@ -251,6 +249,11 @@ try:
         sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, center=0)
         plt.title('Correlation Heatmap of Selected Stocks')
         return plt
+    
+    # Display the correlation heatmap
+    st.subheader("Correlation Heatmap")
+    st.pyplot(plot_correlation_heatmap(correlation_matrix))
+
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
