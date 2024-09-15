@@ -243,6 +243,13 @@ try:
     # Calculate correlation matrix
     correlation_matrix = daily_return[stock_list].corr()
 
+    # Create a heatmap using seaborn
+    def plot_correlation_heatmap(corr_matrix):
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, center=0)
+        plt.title('Correlation Heatmap of Selected Stocks')
+        return plt
+
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
 except:
