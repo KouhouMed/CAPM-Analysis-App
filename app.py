@@ -4,6 +4,8 @@ import plotly.express as px
 import streamlit as st
 import yfinance as yf 
 import datetime as dt
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Configuring web application
 st.set_page_config(page_title= "Market Insight Analysis", page_icon= ":chart:", layout = 'wide')
