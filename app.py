@@ -4,6 +4,7 @@ import plotly.express as px
 import streamlit as st
 import yfinance as yf 
 import datetime as dt
+import plotly.graph_objects as go
 
 # Configuring web application
 st.set_page_config(page_title= "Market Insight Analysis", page_icon= ":chart:", layout = 'wide')
@@ -243,16 +244,31 @@ try:
     # Calculate correlation matrix
     correlation_matrix = daily_return[stock_list].corr()
 
-    # Create a heatmap using seaborn
     def plot_correlation_heatmap(corr_matrix):
-        plt.figure(figsize=(10, 8))
-        sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, center=0)
-        plt.title('Correlation Heatmap of Selected Stocks')
-        return plt
-    
+        fig = go.Figure(data=go.Heatmap(
+            z=corr_matrix.values,
+            x=corr_matrix.columns,
+            y=corr_matrix.index,
+            colorscale='RdBu_r',
+            zmin=-1,
+            zmax=1,
+            text=corr_matrix.values.round(2),
+            texttemplate="%{text}",
+            textfont={"size":10},
+        ))
+
+        fig.update_layout(
+            title='Correlation Heatmap of Selected Stocks',
+            xaxis_title='Stocks',
+            yaxis_title='Stocks',
+            width=700,
+            height=600,
+        )
+        
+        return fig
     # Display the correlation heatmap
     st.subheader("Correlation Heatmap")
-    st.pyplot(plot_correlation_heatmap(correlation_matrix))
+    st.plotly_chart(plot_correlation_heatmap(correlation_matrix), use_container_width=True)
 
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
