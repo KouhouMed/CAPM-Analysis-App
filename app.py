@@ -5,7 +5,8 @@ import streamlit as st
 import yfinance as yf 
 import datetime as dt
 import plotly.graph_objects as go
-
+from data.news_fetcher import fetch_stock_news
+from news_display import display_stock_news
 # Configuring web application
 st.set_page_config(page_title= "Market Insight Analysis", page_icon= ":chart:", layout = 'wide')
 
@@ -273,5 +274,12 @@ try:
 
     st.subheader(f'Conclusion: The Expected Return Based on CAPM for the portfolio is roughly {round(er_portfolio, 2)}%')
 
+
+    # Display news for selected stocks
+    st.header("Recent News for Selected Stocks")
+    for stock in stock_list:
+        st.subheader(f"News for {stock}")
+        news_items = fetch_stock_news(stock)
+        display_stock_news(news_items)
 except:
     st.write("Something went wrong")
