@@ -282,4 +282,4 @@ try:
         news_items = fetch_stock_news(stock)
         display_stock_news(news_items)
 except:
-    st.write("Something went wrong")
+    st.write("Something went wrong. Check your values again.")
